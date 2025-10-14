@@ -19,6 +19,7 @@ COPY index.html /usr/share/nginx/html/index.html
 COPY 404.html /usr/share/nginx/html/404.html
 COPY robots.txt /usr/share/nginx/html/robots.txt
 COPY favicon.svg /usr/share/nginx/html/favicon.svg
+COPY sitemap.xml /usr/share/nginx/html/sitemap.xml
 
 # Expose HTTP
 EXPOSE 80

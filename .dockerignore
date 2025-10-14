@@ -1,11 +1,21 @@
-# Ignore version control and node artifacts
-.git
-.gitignore
-node_modules
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-# Ignore build caches
-.DS_Store
-*.swp
-*.log
+# Ignore everything not needed for the nginx static image
+**/.git
+**/.gitignore
+**/.DS_Store
+**/node_modules
+**/dist
+**/build
+**/.cache
+**/.vscode
+**/.idea
+**/*.log
+**/README.md
+**/.env
+**/.env.*
+**/.terraform
+**/tmp
+**/coverage
+**/.pytest_cache
+**/.venv
+**/venv
+**/__pycache__
