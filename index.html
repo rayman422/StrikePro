@@ -66,6 +66,7 @@
       align-items: center;
       max-width: 1400px;
       margin: 0 auto;
+      position: relative;
     }
 
     .logo {
@@ -323,6 +324,112 @@
       color: #666;
     }
 
+    /* Videos */
+    .video-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+    .video-card {
+      background: linear-gradient(135deg, #1a1a1a, #0f0f0f);
+      border-radius: 15px;
+      overflow: hidden;
+      border: 1px solid #333;
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+
+    .video-card:hover {
+      transform: translateY(-5px);
+      border-color: #ff0000;
+      box-shadow: 0 10px 30px rgba(255, 0, 0, 0.3);
+    }
+
+    .video-thumbnail {
+      width: 100%;
+      height: 200px;
+      background: linear-gradient(135deg, #ff0000, #cc0000);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+      position: relative;
+    }
+
+    .video-duration {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      background: rgba(0, 0, 0, 0.8);
+      padding: 0.3rem 0.6rem;
+      border-radius: 5px;
+      font-size: 0.9rem;
+    }
+
+    .video-info { padding: 1.5rem; }
+    .video-info h3 { color: #fff; margin-bottom: 0.5rem; font-size: 1.3rem; }
+    .video-info p { color: #999; font-size: 0.9rem; }
+    .video-tag { display: inline-block; background: #ff0000; color: #fff; padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.8rem; margin-top: 0.5rem; }
+
+    .locked-overlay {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      font-size: 3rem;
+    }
+    .locked-text { font-size: 1rem; margin-top: 0.5rem; color: #ff0000; font-weight: bold; }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 2000;
+      left: 0; top: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      animation: fadeIn 0.3s;
+    }
+
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    .modal-content {
+      background: linear-gradient(135deg, #1a1a1a, #0f0f0f);
+      margin: 5% auto; padding: 2rem;
+      border: 2px solid #ff0000; border-radius: 15px;
+      width: 90%; max-width: 450px; position: relative;
+      animation: slideDown 0.3s;
+    }
+
+    @keyframes slideDown { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+    .close-modal {
+      position: absolute; top: 0.75rem; right: 0.75rem;
+      color: #ff0000; font-size: 2rem; font-weight: bold; cursor: pointer; line-height: 1;
+      background: transparent; border: none;
+    }
+    .close-modal:hover { color: #fff; }
+
+    .login-tabs { display: flex; gap: 1rem; margin-bottom: 1.25rem; }
+    .tab-btn { flex: 1; padding: 0.8rem; background: #0a0a0a; border: 1px solid #333; color: #fff; cursor: pointer; border-radius: 8px; transition: all 0.3s; font-size: 1rem; font-weight: bold; }
+    .tab-btn.active { background: linear-gradient(135deg, #ff0000, #cc0000); border-color: #ff0000; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* Mobile nav toggle */
+    .nav-toggle {
+      display: none;
+      background: transparent;
+      border: 2px solid #333;
+      color: #fff;
+      padding: 0.5rem 0.75rem;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      cursor: pointer;
+    }
+
+    .login-button { margin-left: 1rem; }
+
     /* Skip link (visible on focus for keyboard users) */
     .skip-link {
       position: absolute;
@@ -356,6 +463,10 @@
       .nav-links {
         display: none;
       }
+
+      .nav-links.open { display: flex; position: absolute; top: 64px; right: 1rem; background: #0a0a0a; border: 1px solid #333; border-radius: 10px; padding: 1rem; flex-direction: column; gap: 1rem; min-width: 220px; }
+      .nav-toggle { display: inline-block; }
+      .login-button { display: none; }
 
       .coach-stats {
         flex-direction: column;
@@ -398,12 +509,16 @@
   <header class="header">
     <nav class="nav" aria-label="Primary">
       <div class="logo">STRIKE PRO</div>
-      <ul class="nav-links">
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-controls="primary-navigation" aria-expanded="false">☰</button>
+      <ul class="nav-links" id="primary-navigation">
         <li><a href="#home">Home</a></li>
         <li><a href="#services">Services</a></li>
+        <li><a href="#videos">Training Videos</a></li>
         <li><a href="#coach">Coach</a></li>
+        <li><a href="#booking">Book Session</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
+      <button type="button" class="btn btn-primary login-button" onclick="openLoginModal()" style="padding: 0.6rem 1.5rem; font-size: 0.9rem;">Login</button>
     </nav>
   </header>
 
@@ -416,6 +531,76 @@
         <a href="#contact" class="btn btn-primary">Start Training</a>
         <a href="#services" class="btn btn-secondary">Learn More</a>
       </div>
+    </div>
+  </section>
+
+  <section id="videos" class="section" aria-labelledby="videos-title">
+    <h2 class="section-title" id="videos-title">Training <span>Videos</span></h2>
+    <p style="text-align: center; color: #ccc; margin-bottom: 3rem; font-size: 1.1rem;">Master your technique with our comprehensive video library</p>
+    <div class="video-grid">
+      <div class="video-card" data-access="free" tabindex="0" role="button" aria-label="Play Basic Stance &amp; Footwork">
+        <div class="video-thumbnail">🥊<div class="video-duration">12:45</div></div>
+        <div class="video-info">
+          <h3>Basic Stance &amp; Footwork</h3>
+          <p>Learn the foundational stance and movement patterns every boxer needs</p>
+          <span class="video-tag">Beginner</span>
+        </div>
+      </div>
+
+      <div class="video-card" data-access="free" tabindex="0" role="button" aria-label="Play Jab &amp; Cross Technique">
+        <div class="video-thumbnail">👊<div class="video-duration">15:30</div></div>
+        <div class="video-info">
+          <h3>Jab &amp; Cross Technique</h3>
+          <p>Perfect your one-two combination with proper form and power</p>
+          <span class="video-tag">Beginner</span>
+        </div>
+      </div>
+
+      <div class="video-card" data-access="free" tabindex="0" role="button" aria-label="Play Defensive Techniques">
+        <div class="video-thumbnail">💪<div class="video-duration">18:20</div></div>
+        <div class="video-info">
+          <h3>Defensive Techniques</h3>
+          <p>Master slips, rolls, and blocks to protect yourself in the ring</p>
+          <span class="video-tag">Intermediate</span>
+        </div>
+      </div>
+
+      <div class="video-card" data-access="locked" tabindex="0" role="button" aria-label="Premium: Advanced Combinations">
+        <div class="video-thumbnail">🔥<div class="video-duration">20:15</div>
+          <div class="locked-overlay">🔒<div class="locked-text">Premium Content</div></div>
+        </div>
+        <div class="video-info">
+          <h3>Advanced Combinations</h3>
+          <p>Complex punch combinations and counter-striking techniques</p>
+          <span class="video-tag">Advanced</span>
+        </div>
+      </div>
+
+      <div class="video-card" data-access="locked" tabindex="0" role="button" aria-label="Premium: Speed &amp; Power Training">
+        <div class="video-thumbnail">⚡<div class="video-duration">25:00</div>
+          <div class="locked-overlay">🔒<div class="locked-text">Premium Content</div></div>
+        </div>
+        <div class="video-info">
+          <h3>Speed &amp; Power Training</h3>
+          <p>Explosive drills to increase your punching speed and power</p>
+          <span class="video-tag">Advanced</span>
+        </div>
+      </div>
+
+      <div class="video-card" data-access="locked" tabindex="0" role="button" aria-label="Premium: Ring Strategy &amp; Tactics">
+        <div class="video-thumbnail">🎯<div class="video-duration">22:40</div>
+          <div class="locked-overlay">🔒<div class="locked-text">Premium Content</div></div>
+        </div>
+        <div class="video-info">
+          <h3>Ring Strategy &amp; Tactics</h3>
+          <p>Learn to read opponents and control the pace of a fight</p>
+          <span class="video-tag">Advanced</span>
+        </div>
+      </div>
+    </div>
+    <div style="text-align: center; margin-top: 3rem;">
+      <p style="color: #ccc; margin-bottom: 1rem;">Want access to premium content?</p>
+      <button type="button" onclick="openLoginModal()" class="btn btn-primary">Login to Access All Videos</button>
     </div>
   </section>
 
@@ -437,6 +622,54 @@
         <h3>Custom Programs</h3>
         <p>Personalized training programs designed specifically for your fitness level, experience, and boxing objectives.</p>
       </div>
+    </div>
+  </section>
+
+  <section id="booking" class="section" style="background: linear-gradient(135deg, #1a1a1a, #0a0a0a);" aria-labelledby="booking-title">
+    <h2 class="section-title" id="booking-title">Book a <span>Live Session</span></h2>
+    <div style="max-width: 600px; margin: 0 auto;">
+      <form id="bookingForm" style="background: #0a0a0a; padding: 2rem; border-radius: 15px; border: 1px solid #333;">
+        <div style="margin-bottom: 1.5rem;">
+          <label for="fullName" style="display: block; margin-bottom: 0.5rem; color: #ff0000; font-weight: bold;">Full Name</label>
+          <input id="fullName" name="fullName" type="text" required style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid #333; background: #1a1a1a; color: #fff; font-size: 1rem;" />
+        </div>
+        <div style="margin-bottom: 1.5rem;">
+          <label for="email" style="display: block; margin-bottom: 0.5rem; color: #ff0000; font-weight: bold;">Email</label>
+          <input id="email" name="email" type="email" required style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid #333; background: #1a1a1a; color: #fff; font-size: 1rem;" />
+        </div>
+        <div style="margin-bottom: 1.5rem;">
+          <label for="phone" style="display: block; margin-bottom: 0.5rem; color: #ff0000; font-weight: bold;">Phone</label>
+          <input id="phone" name="phone" type="tel" required style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid #333; background: #1a1a1a; color: #fff; font-size: 1rem;" />
+        </div>
+        <div style="margin-bottom: 1.5rem;">
+          <label for="experience" style="display: block; margin-bottom: 0.5rem; color: #ff0000; font-weight: bold;">Experience Level</label>
+          <select id="experience" name="experience" required style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid #333; background: #1a1a1a; color: #fff; font-size: 1rem;">
+            <option value="">Select your level</option>
+            <option value="beginner">Beginner</option>
+            <option value="intermediate">Intermediate</option>
+            <option value="advanced">Advanced</option>
+          </select>
+        </div>
+        <div style="margin-bottom: 1.5rem;">
+          <label for="preferredDate" style="display: block; margin-bottom: 0.5rem; color: #ff0000; font-weight: bold;">Preferred Date</label>
+          <input id="preferredDate" name="preferredDate" type="date" required style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid #333; background: #1a1a1a; color: #fff; font-size: 1rem;" />
+        </div>
+        <div style="margin-bottom: 1.5rem;">
+          <label for="preferredTime" style="display: block; margin-bottom: 0.5rem; color: #ff0000; font-weight: bold;">Preferred Time</label>
+          <select id="preferredTime" name="preferredTime" required style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid #333; background: #1a1a1a; color: #fff; font-size: 1rem;">
+            <option value="">Select time</option>
+            <option value="morning">Morning (6am - 12pm)</option>
+            <option value="afternoon">Afternoon (12pm - 5pm)</option>
+            <option value="evening">Evening (5pm - 9pm)</option>
+          </select>
+        </div>
+        <div style="margin-bottom: 1.5rem;">
+          <label for="notes" style="display: block; margin-bottom: 0.5rem; color: #ff0000; font-weight: bold;">Additional Notes</label>
+          <textarea id="notes" name="notes" rows="4" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid #333; background: #1a1a1a; color: #fff; font-size: 1rem; resize: vertical;" placeholder="Any specific goals or questions?"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%;">Submit Booking Request</button>
+      </form>
+      <p style="text-align: center; margin-top: 1.5rem; color: #999; font-size: 0.9rem;">We'll contact you within 24 hours to confirm your session</p>
     </div>
   </section>
 
@@ -482,5 +715,170 @@
   <footer class="footer">
     <p>&copy; 2024 Strike Pro Boxing Training. All rights reserved.</p>
   </footer>
+  <!-- Login Modal -->
+  <div id="loginModal" class="modal" aria-hidden="true">
+    <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="loginModalTitle">
+      <button type="button" class="close-modal" aria-label="Close modal">&times;</button>
+      <h2 id="loginModalTitle" style="margin-bottom: 1rem; color: #fff;">Welcome back</h2>
+      <div class="login-tabs">
+        <button type="button" class="tab-btn active" data-tab="login">Login</button>
+        <button type="button" class="tab-btn" data-tab="register">Register</button>
+      </div>
+      <div id="login" class="tab-content active">
+        <form id="loginForm">
+          <div style="margin-bottom: 1rem;">
+            <label for="loginEmail" style="display: block; margin-bottom: 0.5rem; color: #ff6666; font-weight: 600;">Email</label>
+            <input id="loginEmail" name="loginEmail" type="email" required style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid #333; background: #1a1a1a; color: #fff;" />
+          </div>
+          <div style="margin-bottom: 1rem;">
+            <label for="loginPassword" style="display: block; margin-bottom: 0.5rem; color: #ff6666; font-weight: 600;">Password</label>
+            <input id="loginPassword" name="loginPassword" type="password" required style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid #333; background: #1a1a1a; color: #fff;" />
+          </div>
+          <button type="submit" class="btn btn-primary" style="width: 100%;">Login</button>
+        </form>
+      </div>
+      <div id="register" class="tab-content">
+        <form id="registerForm">
+          <div style="margin-bottom: 1rem;">
+            <label for="registerName" style="display: block; margin-bottom: 0.5rem; color: #ff6666; font-weight: 600;">Full Name</label>
+            <input id="registerName" name="registerName" type="text" required style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid #333; background: #1a1a1a; color: #fff;" />
+          </div>
+          <div style="margin-bottom: 1rem;">
+            <label for="registerEmail" style="display: block; margin-bottom: 0.5rem; color: #ff6666; font-weight: 600;">Email</label>
+            <input id="registerEmail" name="registerEmail" type="email" required style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid #333; background: #1a1a1a; color: #fff;" />
+          </div>
+          <div style="margin-bottom: 1rem;">
+            <label for="registerPassword" style="display: block; margin-bottom: 0.5rem; color: #ff6666; font-weight: 600;">Password</label>
+            <input id="registerPassword" name="registerPassword" type="password" required style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid #333; background: #1a1a1a; color: #fff;" />
+          </div>
+          <button type="submit" class="btn btn-primary" style="width: 100%;">Create Account</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Mobile nav toggle
+    (function() {
+      const toggleButton = document.querySelector('.nav-toggle');
+      const navLinks = document.getElementById('primary-navigation');
+      if (toggleButton && navLinks) {
+        toggleButton.addEventListener('click', () => {
+          const isOpen = navLinks.classList.toggle('open');
+          toggleButton.setAttribute('aria-expanded', String(isOpen));
+        });
+        navLinks.addEventListener('click', (e) => {
+          if (e.target instanceof Element && e.target.tagName === 'A') {
+            navLinks.classList.remove('open');
+            toggleButton.setAttribute('aria-expanded', 'false');
+          }
+        });
+      }
+    })();
+
+    // Booking form
+    (function() {
+      const bookingForm = document.getElementById('bookingForm');
+      if (bookingForm) {
+        bookingForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          alert('Thank you for your booking request! We will contact you within 24 hours to confirm your session.');
+          this.reset();
+        });
+      }
+    })();
+
+    // Modal logic with basic focus handling
+    let lastFocusedElementBeforeModal = null;
+    const modal = document.getElementById('loginModal');
+    const closeModalButton = modal ? modal.querySelector('.close-modal') : null;
+
+    function getFocusableElements(container) {
+      return Array.from(container.querySelectorAll('a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])'))
+        .filter(el => !el.hasAttribute('disabled') && !el.getAttribute('aria-hidden'));
+    }
+
+    function trapFocus(e) {
+      if (!modal || modal.style.display !== 'block') return;
+      if (e.key !== 'Tab') return;
+      const focusable = getFocusableElements(modal);
+      if (focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+
+    function openLoginModal() {
+      if (!modal) return;
+      lastFocusedElementBeforeModal = document.activeElement;
+      modal.style.display = 'block';
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      const focusable = getFocusableElements(modal);
+      if (focusable.length) focusable[0].focus();
+      document.addEventListener('keydown', trapFocus);
+      document.addEventListener('keydown', onEscToClose);
+    }
+    function closeLoginModal() {
+      if (!modal) return;
+      modal.style.display = 'none';
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      document.removeEventListener('keydown', trapFocus);
+      document.removeEventListener('keydown', onEscToClose);
+      if (lastFocusedElementBeforeModal && typeof lastFocusedElementBeforeModal.focus === 'function') {
+        lastFocusedElementBeforeModal.focus();
+      }
+    }
+    function onEscToClose(e) { if (e.key === 'Escape') closeLoginModal(); }
+
+    window.openLoginModal = openLoginModal;
+
+    if (modal) {
+      modal.addEventListener('click', (e) => { if (e.target === modal) closeLoginModal(); });
+    }
+    if (closeModalButton) {
+      closeModalButton.addEventListener('click', closeLoginModal);
+    }
+
+    // Tabs
+    (function() {
+      const tabButtons = document.querySelectorAll('.tab-btn');
+      const tabContents = document.querySelectorAll('.tab-content');
+      tabButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const target = btn.getAttribute('data-tab');
+          tabButtons.forEach(b => b.classList.remove('active'));
+          tabContents.forEach(c => c.classList.remove('active'));
+          btn.classList.add('active');
+          const content = document.getElementById(target);
+          if (content) content.classList.add('active');
+        });
+      });
+    })();
+
+    // Video interactions
+    (function() {
+      const cards = document.querySelectorAll('.video-card');
+      cards.forEach(card => {
+        function handleActivate() {
+          const isLocked = card.getAttribute('data-access') === 'locked' || card.querySelector('.locked-overlay');
+          if (isLocked) {
+            openLoginModal();
+          } else {
+            alert('Playing preview video...');
+          }
+        }
+        card.addEventListener('click', handleActivate);
+        card.addEventListener('keypress', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleActivate(); } });
+      });
+    })();
+  </script>
 </body>
 </html>
