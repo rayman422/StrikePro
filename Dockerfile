@@ -8,10 +8,23 @@ LABEL org.opencontainers.image.title="Strike Pro Boxing Site" \
       org.opencontainers.image.description="Static boxing training landing page served by Nginx" \
       org.opencontainers.image.licenses="MIT"
 
-# Copy static site
+# Utilities for healthcheck
+RUN apk add --no-cache curl
+
+# Copy custom Nginx config
+COPY nginx/default.conf /etc/nginx/conf.d/default.conf
+
+# Copy static site assets
 COPY index.html /usr/share/nginx/html/index.html
+COPY 404.html /usr/share/nginx/html/404.html
+COPY robots.txt /usr/share/nginx/html/robots.txt
+COPY favicon.svg /usr/share/nginx/html/favicon.svg
 
 # Expose HTTP
 EXPOSE 80
+
+# Container healthcheck
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD curl -fsS http://localhost/healthz || exit 1
 
 # Default Nginx entrypoint/cmd will serve the content
