@@ -528,7 +528,7 @@
       <h1>STRIKE PRO</h1>
       <p>Professional Boxing Training | Live &amp; Video Sessions</p>
       <div class="cta-buttons">
-        <a href="#contact" class="btn btn-primary">Start Training</a>
+        <a href="#booking" class="btn btn-primary">Book Live Session</a>
         <a href="#services" class="btn btn-secondary">Learn More</a>
       </div>
     </div>
@@ -696,10 +696,10 @@
     </div>
   </section>
 
-  <section id="contact" class="contact-section">
+  <section id="contact" class="contact-section" aria-labelledby="contact-title">
     <div class="contact-content">
-      <h2 class="section-title">Get <span>Started</span></h2>
-      <p style="color: #ccc; margin-bottom: 2rem;">Ready to begin your boxing journey? Contact us today to schedule your first session.</p>
+      <h2 class="section-title" id="contact-title">Get In <span>Touch</span></h2>
+      <p style="color: #ccc; margin-bottom: 2rem;">Questions? Reach out to us directly.</p>
       <div class="contact-info">
         <div class="contact-item">
           <strong>Business Email</strong>
@@ -711,6 +711,8 @@
       </div>
     </div>
   </section>
+
+  
   </main>
   <footer class="footer">
     <p>&copy; 2024 Strike Pro Boxing Training. All rights reserved.</p>
@@ -878,6 +880,35 @@
         card.addEventListener('click', handleActivate);
         card.addEventListener('keypress', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleActivate(); } });
       });
+    })();
+
+    // Auth form handlers (demo)
+    (function() {
+      const loginForm = document.getElementById('loginForm');
+      const registerForm = document.getElementById('registerForm');
+      function unlockPremium() {
+        document.querySelectorAll('.video-card[data-access="locked"]').forEach(card => {
+          card.setAttribute('data-access', 'free');
+          const overlay = card.querySelector('.locked-overlay');
+          if (overlay) overlay.remove();
+        });
+      }
+      if (loginForm) {
+        loginForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          unlockPremium();
+          alert('Logged in! Premium content unlocked.');
+          closeLoginModal();
+        });
+      }
+      if (registerForm) {
+        registerForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          unlockPremium();
+          alert('Account created! Premium content unlocked.');
+          closeLoginModal();
+        });
+      }
     })();
   </script>
 </body>
