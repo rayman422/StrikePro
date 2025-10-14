@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Strike Pro - Professional Boxing Training</title>
+  <meta name="description" content="Strike Pro offers professional boxing training via live sessions and a comprehensive video library. Start your journey with personalized coaching." />
+  <style>
+    /* Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      /* Prevent fixed header from covering anchor targets */
+      scroll-padding-top: 80px;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #fff;
+      background: #0a0a0a;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
+      padding: 1rem 2rem;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 20px rgba(255, 0, 0, 0.3);
+    }
+
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .logo {
+      font-size: 2rem;
+      font-weight: bold;
+      background: linear-gradient(135deg, #ff0000, #cc0000);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: #fff;
+      text-decoration: none;
+      transition: color 0.3s;
+      font-weight: 500;
+    }
+
+    .nav-links a:hover {
+      color: #ff0000;
+    }
+
+    .hero {
+      background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.8)), url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><rect fill="%23111" width="1200" height="600"/><path fill="%23ff0000" opacity="0.1" d="M0 300l50-50 50 50 50-50 50 50 50-50 50 50 50-50 50 50 50-50 50 50 50-50 50 50 50-50 50 50 50-50 50 50 50-50 50 50 50-50 50 50 50-50 50 50V600H0V300z"/></svg>');
+      background-size: cover;
+      background-position: center;
+      padding: 150px 2rem 100px;
+      text-align: center;
+    }
+
+    .hero-content {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .hero h1 {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, #ff0000, #ff6666);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      font-size: 1.5rem;
+      margin-bottom: 2rem;
+      color: #ccc;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 1rem 2.5rem;
+      border: none;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #ff0000, #cc0000);
+      color: #fff;
+      box-shadow: 0 4px 15px rgba(255, 0, 0, 0.4);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(255, 0, 0, 0.6);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: #fff;
+      border: 2px solid #ff0000;
+    }
+
+    .btn-secondary:hover {
+      background: #ff0000;
+      transform: translateY(-3px);
+    }
+
+    .section {
+      padding: 80px 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 2.5rem;
+      margin-bottom: 3rem;
+      color: #fff;
+    }
+
+    .section-title span {
+      color: #ff0000;
+    }
+
+    .services {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+    .service-card {
+      background: linear-gradient(135deg, #1a1a1a, #0f0f0f);
+      padding: 2rem;
+      border-radius: 15px;
+      text-align: center;
+      transition: all 0.3s;
+      border: 1px solid #333;
+    }
+
+    .service-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 10px 30px rgba(255, 0, 0, 0.3);
+      border-color: #ff0000;
+    }
+
+    .service-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    .service-card h3 {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+      color: #ff0000;
+    }
+
+    .service-card p {
+      color: #ccc;
+      line-height: 1.8;
+    }
+
+    .coach-section {
+      background: linear-gradient(135deg, #1a1a1a, #0a0a0a);
+      padding: 80px 2rem;
+    }
+
+    .coach-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 3rem;
+      align-items: center;
+    }
+
+    .coach-image {
+      width: 100%;
+      aspect-ratio: 1;
+      background: linear-gradient(135deg, #ff0000, #cc0000);
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 8rem;
+      box-shadow: 0 10px 40px rgba(255, 0, 0, 0.4);
+    }
+
+    .coach-info h2 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      color: #ff0000;
+    }
+
+    .coach-info h3 {
+      font-size: 1.5rem;
+      margin-bottom: 2rem;
+      color: #ccc;
+    }
+
+    .coach-stats {
+      display: flex;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat {
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 3rem;
+      color: #ff0000;
+      font-weight: bold;
+    }
+
+    .stat-label {
+      color: #ccc;
+    }
+
+    .contact-section {
+      background: #0a0a0a;
+      padding: 80px 2rem;
+    }
+
+    .contact-content {
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .contact-info {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .contact-item {
+      background: #1a1a1a;
+      padding: 1.5rem;
+      border-radius: 10px;
+      border: 1px solid #333;
+    }
+
+    .contact-item strong {
+      color: #ff0000;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+
+    .footer {
+      background: #000;
+      padding: 2rem;
+      text-align: center;
+      color: #666;
+    }
+
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+
+      .coach-content {
+        grid-template-columns: 1fr;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .coach-stats {
+        flex-direction: column;
+        gap: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <nav class="nav" aria-label="Primary">
+      <div class="logo">STRIKE PRO</div>
+      <ul class="nav-links">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#coach">Coach</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section id="home" class="hero">
+    <div class="hero-content">
+      <h1>STRIKE PRO</h1>
+      <p>Professional Boxing Training | Live &amp; Video Sessions</p>
+      <div class="cta-buttons">
+        <a href="#contact" class="btn btn-primary">Start Training</a>
+        <a href="#services" class="btn btn-secondary">Learn More</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="services" class="section">
+    <h2 class="section-title">Training <span>Services</span></h2>
+    <div class="services">
+      <div class="service-card">
+        <div class="service-icon">🥊</div>
+        <h3>Live Training</h3>
+        <p>One-on-one personalized coaching sessions tailored to your skill level and goals. Get real-time feedback and guidance.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🎥</div>
+        <h3>Video Training</h3>
+        <p>Access comprehensive video library with technique breakdowns, drills, and workout routines you can follow anytime.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">💪</div>
+        <h3>Custom Programs</h3>
+        <p>Personalized training programs designed specifically for your fitness level, experience, and boxing objectives.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="coach" class="coach-section">
+    <div class="coach-content">
+      <div class="coach-image" aria-hidden="true">🥊</div>
+      <div class="coach-info">
+        <h2>Michael Offner</h2>
+        <h3>Professional Boxing Coach</h3>
+        <div class="coach-stats">
+          <div class="stat">
+            <div class="stat-number">3+</div>
+            <div class="stat-label">Years Experience</div>
+          </div>
+        </div>
+        <p style="color: #ccc; line-height: 1.8;">
+          With 3 years of dedicated coaching experience, Michael Offner brings passion, expertise, and personalized attention to every training session. Whether you're a beginner learning the fundamentals or an experienced fighter refining your technique, Michael provides the guidance you need to reach your goals.
+        </p>
+        <div style="margin-top: 1.5rem; padding: 1rem; background: #0a0a0a; border-radius: 10px; border: 1px solid #333;">
+          <strong style="color: #ff0000;">Contact Coach:</strong>
+          <p style="color: #fff; margin-top: 0.5rem; font-size: 1.2rem;"><a href="tel:14235799306" style="color: inherit; text-decoration: none;">423-579-9306</a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="contact-section">
+    <div class="contact-content">
+      <h2 class="section-title">Get <span>Started</span></h2>
+      <p style="color: #ccc; margin-bottom: 2rem;">Ready to begin your boxing journey? Contact us today to schedule your first session.</p>
+      <div class="contact-info">
+        <div class="contact-item">
+          <strong>Business Email</strong>
+          <p><a href="mailto:strikeprok0@gmail.com" style="color: #fff; text-decoration: none;">strikeprok0@gmail.com</a></p>
+        </div>
+      </div>
+      <div style="margin-top: 2rem;">
+        <a href="mailto:strikeprok0@gmail.com" class="btn btn-primary">Email Us</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p>&copy; 2024 Strike Pro Boxing Training. All rights reserved.</p>
+  </footer>
+</body>
+</html>
