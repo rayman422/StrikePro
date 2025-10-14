@@ -51,7 +51,7 @@ curl -fsS http://localhost:8080/healthz
   - `index.html` `<link rel="canonical" ...>` and OG/Twitter URLs
   - `sitemap.xml` and `robots.txt` sitemap URL
 - If serving over HTTPS behind a reverse proxy, keep HSTS enabled. For initial testing on HTTP only, HSTS is harmless but only applied over HTTPS.
-- Content-Security-Policy allows inline script for JSON-LD only. Avoid adding other inline scripts.
+- Content-Security-Policy is configured in Nginx to allow only the exact JSON-LD script via a SHA-256 hash. If you change the JSON-LD in `index.html`, recompute the hash and update `nginx/default.conf`'s `script-src` directive accordingly.
 
 ## License
 MIT
