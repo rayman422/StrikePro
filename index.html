@@ -778,16 +778,32 @@
       }
     })();
 
-    // Booking form
+    // Booking form -> call API
     (function() {
       const bookingForm = document.getElementById('bookingForm');
-      if (bookingForm) {
-        bookingForm.addEventListener('submit', function(e) {
-          e.preventDefault();
-          alert('Thank you for your booking request! We will contact you within 24 hours to confirm your session.');
-          this.reset();
-        });
-      }
+      if (!bookingForm) return;
+      bookingForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const form = new FormData(bookingForm);
+        const payload = {
+          fullName: form.get('fullName'),
+          email: form.get('email'),
+          phone: form.get('phone'),
+          experience: form.get('experience'),
+          preferredDate: form.get('preferredDate'),
+          preferredTime: form.get('preferredTime'),
+          notes: form.get('notes') || ''
+        };
+        try {
+          const res = await fetch('/api/booking', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+          if (!res.ok) throw new Error('Failed to submit booking');
+          await res.json();
+          alert('Thank you! Your booking request was received. We will confirm within 24 hours.');
+          bookingForm.reset();
+        } catch (err) {
+          alert('Sorry, we could not submit your booking. Please try again later.');
+        }
+      });
     })();
 
     // Modal logic with basic focus handling
@@ -882,10 +898,13 @@
       });
     })();
 
-    // Auth form handlers (demo)
+    // Auth form handlers -> call API and store token
     (function() {
+      const tokenKey = 'strikepro_token';
       const loginForm = document.getElementById('loginForm');
       const registerForm = document.getElementById('registerForm');
+      function setToken(token) { try { localStorage.setItem(tokenKey, token); } catch (_) {} }
+      function getToken() { try { return localStorage.getItem(tokenKey) || ''; } catch (_) { return ''; } }
       function unlockPremium() {
         document.querySelectorAll('.video-card[data-access="locked"]').forEach(card => {
           card.setAttribute('data-access', 'free');
@@ -893,21 +912,39 @@
           if (overlay) overlay.remove();
         });
       }
+      async function handleAuth(endpoint, payload) {
+        const res = await fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+        if (!res.ok) throw new Error('Auth failed');
+        const data = await res.json();
+        if (data.token) setToken(data.token);
+        unlockPremium();
+        closeLoginModal();
+        alert('You are signed in. Premium videos unlocked.');
+      }
       if (loginForm) {
-        loginForm.addEventListener('submit', function(e) {
+        loginForm.addEventListener('submit', async function(e) {
           e.preventDefault();
-          unlockPremium();
-          alert('Logged in! Premium content unlocked.');
-          closeLoginModal();
+          const email = (document.getElementById('loginEmail')).value;
+          const password = (document.getElementById('loginPassword')).value;
+          try { await handleAuth('/api/auth/login', { email, password }); } catch { alert('Login failed. Please try again.'); }
         });
       }
       if (registerForm) {
-        registerForm.addEventListener('submit', function(e) {
+        registerForm.addEventListener('submit', async function(e) {
           e.preventDefault();
-          unlockPremium();
-          alert('Account created! Premium content unlocked.');
-          closeLoginModal();
+          const name = (document.getElementById('registerName')).value;
+          const email = (document.getElementById('registerEmail')).value;
+          const password = (document.getElementById('registerPassword')).value;
+          try { await handleAuth('/api/auth/register', { name, email, password }); } catch { alert('Registration failed. Please try again.'); }
         });
+      }
+      // Attempt to fetch premium data if token exists (optional demo)
+      const existing = getToken();
+      if (existing) {
+        fetch('/api/videos/premium', { headers: { Authorization: `Bearer ${existing}` } })
+          .then(res => res.ok ? res.json() : Promise.reject())
+          .then(() => unlockPremium())
+          .catch(() => {});
       }
     })();
   </script>

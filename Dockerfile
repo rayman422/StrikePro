@@ -1,6 +1,13 @@
 # syntax=docker/dockerfile:1
 
 # Base image with Nginx to serve static files
+FROM node:20-alpine AS api
+
+WORKDIR /app
+COPY api/package.json ./api/package.json
+RUN --mount=type=cache,target=/root/.npm npm --prefix ./api ci || npm --prefix ./api install --production
+COPY api/server.js ./api/server.js
+
 FROM nginx:1.27-alpine
 
 # Metadata labels
@@ -27,5 +34,10 @@ EXPOSE 80
 # Container healthcheck
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
   CMD curl -fsS http://localhost/healthz || exit 1
+
+# Run Node API sidecar inside same container (simple approach)
+COPY --from=api /app/api /opt/strike-pro-api
+RUN apk add --no-cache dumb-init
+CMD ["/bin/sh", "-c", "node /opt/strike-pro-api/server.js & nginx -g 'daemon off;' "]
 
 # Default Nginx entrypoint/cmd will serve the content
