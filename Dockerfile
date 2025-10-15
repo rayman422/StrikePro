@@ -5,8 +5,8 @@ FROM node:20-alpine AS api
 
 WORKDIR /app
 COPY api/package.json ./api/package.json
-RUN --mount=type=cache,target=/root/.npm npm --prefix ./api ci || npm --prefix ./api install --production
-COPY api/server.js ./api/server.js
+RUN --mount=type=cache,target=/root/.npm npm --prefix ./api install --omit=dev
+COPY api ./api
 
 FROM nginx:1.27-alpine
 
