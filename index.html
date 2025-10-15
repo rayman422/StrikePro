@@ -28,7 +28,7 @@
   <meta name="twitter:image:alt" content="Strike Pro logo" />
   <meta name="color-scheme" content="dark light" />
 
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
   <style>
     /* Reset */
     * {
@@ -760,6 +760,16 @@
   </div>
 
   <script>
+    // Detect API availability for GitHub Pages fallback (demo mode)
+    (function() {
+      window.__DEMO_MODE__ = false;
+      try {
+        fetch('/api/healthz', { method: 'GET', cache: 'no-store' })
+          .then((r) => { if (!r.ok) throw new Error('no api'); })
+          .catch(() => { window.__DEMO_MODE__ = true; });
+      } catch (_) { window.__DEMO_MODE__ = true; }
+    })();
+
     // Mobile nav toggle
     (function() {
       const toggleButton = document.querySelector('.nav-toggle');
@@ -778,7 +788,7 @@
       }
     })();
 
-    // Booking form -> call API
+    // Booking form -> call API (fallback to demo mode on failure)
     (function() {
       const bookingForm = document.getElementById('bookingForm');
       if (!bookingForm) return;
@@ -801,7 +811,12 @@
           alert('Thank you! Your booking request was received. We will confirm within 24 hours.');
           bookingForm.reset();
         } catch (err) {
-          alert('Sorry, we could not submit your booking. Please try again later.');
+          if (window.__DEMO_MODE__) {
+            alert('Thank you! (Demo) Your booking request was received. We will confirm within 24 hours.');
+            bookingForm.reset();
+          } else {
+            alert('Sorry, we could not submit your booking. Please try again later.');
+          }
         }
       });
     })();
@@ -926,7 +941,11 @@
           e.preventDefault();
           const email = (document.getElementById('loginEmail')).value;
           const password = (document.getElementById('loginPassword')).value;
-          try { await handleAuth('/api/auth/login', { email, password }); } catch { alert('Login failed. Please try again.'); }
+          try { await handleAuth('/api/auth/login', { email, password }); }
+          catch {
+            if (window.__DEMO_MODE__) { unlockPremium(); closeLoginModal(); alert('You are signed in (demo). Premium videos unlocked.'); }
+            else { alert('Login failed. Please try again.'); }
+          }
         });
       }
       if (registerForm) {
@@ -935,7 +954,11 @@
           const name = (document.getElementById('registerName')).value;
           const email = (document.getElementById('registerEmail')).value;
           const password = (document.getElementById('registerPassword')).value;
-          try { await handleAuth('/api/auth/register', { name, email, password }); } catch { alert('Registration failed. Please try again.'); }
+          try { await handleAuth('/api/auth/register', { name, email, password }); }
+          catch {
+            if (window.__DEMO_MODE__) { unlockPremium(); closeLoginModal(); alert('Account created (demo). Premium videos unlocked.'); }
+            else { alert('Registration failed. Please try again.'); }
+          }
         });
       }
       // Attempt to fetch premium data if token exists (optional demo)
